@@ -27,24 +27,29 @@ function VehicleFactory(){};
 
 //Ensure that you're not creating a bunch of properties each time you 
 //create a factory
-vehicleFactory.prototype.vehicleClass = Car;
+VehicleFactory.prototype.vehicleClass = Car;
 
-vehicleFactory.prototype.createVehicle = function(options){
+VehicleFactory.prototype.createVehicle = function(options){
 	
 	if(options.vehicleType === "car") this.vehicleClass = Car;
 	else this.vehicleClass = Truck;
 
-	return new this.vehicleType(options);
+	return new this.vehicleClass(options);
 }
 
 
 //Instantiate the factory
-var carFactory = new vehicleFactory();
+var carFactory = new VehicleFactory();
 
-carFactory.createVehicle({
+var myCar = carFactory.createVehicle({
 	vehicleType: "car",
 	color: "yellow"
 });
+
+console.log(myCar instanceof Car); 
+console.log(myCar);
+
+
 
 
 //CREATE A SUBCLASS FOR TRUCKS ONLY!!
@@ -52,10 +57,58 @@ function TruckFactory(){}
 
 //Here's the interesting part...
 //You copy the Vehicle Factory Class to this empty prototype!
+TruckFactory.prototype = new VehicleFactory();
 
 TruckFactory.prototype.vehicleClass = Truck;
 
-TruckFactory.prototype.createVehicle = 
+var truckFactory = new TruckFactory();
+
+var myTruck = truckFactory.createVehicle({
+	color: "grey"
+});
+
+console.log(myTruck instanceof Truck);
+console.log(myTruck);
+
+
+
+//create another one quick...
+
+function Button(options){
+	color: options.color || "native";
+	size: options.size || "medium";
+}
+
+function ImageButton(options){
+	color: options.color || "transparent";
+	size: options.size || "medium";
+}
+
+function WidgetFactory(){}
+
+ButtonFactory.prototype.buttonType = Button;
+
+ButtonFactory.prototype.createButton = function(options){
+
+	if(options.buttonType === "button") this.buttonType = Button;
+	else this.buttonType = ImageButton;
+
+	return  new this.buttonType();
+}
+
+var buttonFactory = new ButtonFactory();
+
+var myButton = buttonFactory.createButton({
+	color: "green",
+	size: "large"
+});
+
+console.log(myButton);
+
+
+
+
+
 
 
 
